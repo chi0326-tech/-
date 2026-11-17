@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#20232b">
+<title>沈知珩的手機</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#15171c;color:#eee;font-family:Arial,"Noto Sans TC",sans-serif;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+.phone{width:360px;height:760px;max-height:92vh;background:#20232b;border:7px solid #393b42;border-radius:38px;overflow:hidden;box-shadow:0 20px 70px #0009;display:flex;flex-direction:column;position:relative}
+.status{height:35px;flex-shrink:0;padding:10px 22px 4px;display:flex;justify-content:space-between;font-size:12px;background:#20232b}
+#screen{flex:1;overflow-y:auto;padding:18px}
+#screen::-webkit-scrollbar{width:3px}#screen::-webkit-scrollbar-thumb{background:#555}
+.nav{height:65px;flex-shrink:0;display:flex;justify-content:space-around;align-items:center;background:#292c35;border-top:1px solid #41444d}
+.nav button{border:0;background:none;color:#aaa;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.nav button.active{color:#d7b98c}.nav span{font-size:21px}
+h2{font-size:21px;margin:5px 0 18px}h3{font-size:15px;margin:0 0 8px}
+p{line-height:1.6;font-size:13px;color:#ccc}.small{font-size:11px;color:#999}
+.card{background:#2c303a;border:1px solid #414550;border-radius:15px;padding:14px;margin-bottom:12px}
+.profile{text-align:center;padding:20px 10px}
+.avatar{width:90px;height:90px;border-radius:50%;margin:auto auto 12px;background:#414955;display:flex;align-items:center;justify-content:center;font-size:38px;border:2px solid #bba17e}
+.apps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px 12px;margin-top:30px}
+.app{border:0;background:none;color:white;display:flex;flex-direction:column;align-items:center;gap:7px;font-size:12px}
+.app-icon{width:57px;height:57px;border-radius:17px;display:grid;place-items:center;font-size:27px;box-shadow:0 4px 12px #0004}
+.green{background:#ADFEDC;color:#253c32}.pink{background:#8F4586;color:white}.blue{background:#D1E9E9;color:#385b5b}.gold{background:#FFFFCE;color:#EAC100}.gray{background:#ECF5FF;color:#52718e}.purple{background:#353535;color:white}
+.lne-icon{font-family:"DFKai-SB","BiauKai",serif;font-size:20px;font-weight:bold;letter-spacing:-1px}
+button{cursor:pointer}
+input,textarea{width:100%;background:#20232b;color:white;border:1px solid #4b4e58;border-radius:10px;padding:11px;font-size:13px;outline:none;margin:5px 0}
+textarea{resize:vertical;min-height:75px}
+.action{background:#b99b73;color:#171717;border:0;border-radius:9px;padding:9px 14px;font-weight:bold;font-size:12px;margin-top:6px}
+.back{border:0;background:none;color:#c5a982;padding:0;margin-bottom:15px;font-size:13px}
+.item{display:flex;align-items:center;gap:12px;padding:12px 5px;border-bottom:1px solid #41444d;cursor:pointer}
+.mini-avatar{width:42px;height:42px;border-radius:50%;background:#555d6b;display:grid;place-items:center;font-size:19px;flex-shrink:0}
+.chat-bubble{padding:10px 13px;border-radius:13px;max-width:82%;font-size:13px;line-height:1.5;margin:9px 0;background:#393e49;overflow-wrap:anywhere}
+.mine{background:#826b50;margin-left:auto;color:white}
+.chat-input{display:flex;gap:6px;align-items:center}.chat-input input{margin:0}
+.post-image{height:145px;border-radius:10px;background:linear-gradient(135deg,#515b67,#272a32);display:grid;place-items:center;font-size:40px;margin:10px 0}
+.muted{color:#999}.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.note{cursor:pointer}hr{border:0;border-top:1px solid #41444d;margin:14px 0}
+.login-screen{height:100%;min-height:520px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:25px;background:linear-gradient(160deg,#252c35,#15171c);border-radius:18px}
+.login-time{font-size:55px;font-weight:300;letter-spacing:2px;margin-bottom:5px}
+.login-date{font-size:13px;color:#aaa;margin-bottom:55px}
+.login-avatar{width:85px;height:85px;border-radius:50%;background:#414955;border:2px solid #bba17e;display:grid;place-items:center;font-size:35px;margin-bottom:15px}
+.login-screen input{width:210px;text-align:center;letter-spacing:8px;font-size:20px;margin-top:20px}
+.login-hint{color:#999;font-size:11px;margin-top:15px}.login-error{color:#e88d8d;font-size:12px;margin-top:10px;min-height:16px}
+.lock-button{background:transparent;border:1px solid #777;color:#bbb;border-radius:20px;padding:6px 12px;font-size:11px}
+@media(max-width:420px){body{padding:0;background:#20232b}.phone{width:100vw;height:100dvh;max-height:none;border:0;border-radius:0}.login-screen{border-radius:0}}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="status"><span id="clock">00:00</span><span>●●●　Wi-Fi ▰</span></div>
+  <main id="screen"></main>
+  <div class="nav" id="navbar">
+    <button onclick="home()"><span>⌂</span>桌面</button>
+    <button onclick="openApp('LNE')"><span>▣</span>LNE</button>
+    <button onclick="openApp('TG')"><span>◎</span>TG</button>
+    <button onclick="openApp('備忘錄')"><span>▤</span>筆記</button>
+  </div>
+</div>
+<script>
+const PHONE_PASSWORD = "0307";
+const $ = id => document.getElementById(id);
+const screen = $("screen");
+const defaults = {
+  messages:{
+    "周予安":[{text:"晚上要不要一起吃飯？",mine:false},{text:"我訂了那間妳上次說想去的店。",mine:false}],
+    "林以辰":[{text:"設計圖我傳給你了，記得看。",mine:false},{text:"還有，明天不要遲到。",mine:false}],
+    "陳默":[{text:"你昨天是不是又熬夜了？",mine:false}]
+  },
+  posts:[
+    {author:"沈知珩",time:"今天 12:34",text:"午餐。今天的咖啡比平常苦一點。",likes:18,comments:["周予安：你不是一直都喝黑咖啡？"]},
+    {author:"沈知珩",time:"昨天 23:16",text:"凌晨的城市很安靜。適合工作，也適合發呆。",likes:32,comments:[]},
+    {author:"沈知珩",time:"11月14日",text:"終於把那份設計稿完成了。",likes:46,comments:["林以辰：恭喜。","周予安：請客。"]}
+  ],
+  notes:[
+    {title:"待辦事項",content:"1. 修改建築模型\n2. 下午三點開會\n3. 記得買牛奶"},
+    {title:"私人備忘",content:"最近好像有點太忙了。\n週末應該留一點時間給自己。"},
+    {title:"餐廳清單",content:"・巷口義大利餐廳\n・新開的日式咖啡店\n・那間預約很難的牛排館"}
+  ],
+  feed:[
+    {author:"周予安",text:"今天終於放晴了。",time:"今天 10:21",likes:12},
+    {author:"林以辰",text:"新專案開始，接下來應該會很忙。",time:"昨天 18:30",likes:8}
+  ]
+};
+function load(){
+  try{
+    const saved=localStorage.getItem("zxh_phone");
+    if(!saved)return structuredClone(defaults);
+    const parsed=JSON.parse(saved);
+    return {...structuredClone(defaults),...parsed};
+  }catch(e){return structuredClone(defaults)}
+}
+let data=load();
+function save(){localStorage.setItem("zxh_phone",JSON.stringify(data))}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function updateClock(){
+  $("clock").textContent=new Date().toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",hour12:false});
+  if($("loginTime")){
+    const now=new Date();
+    $("loginTime").textContent=now.toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",hour12:false});
+    $("loginDate").textContent=now.toLocaleDateString("zh-TW",{year:"numeric",month:"long",day:"numeric",weekday:"long"});
+  }
+}
+function login(){
+  $("navbar").style.display="none";
+  screen.innerHTML=`
+    <div class="login-screen">
+      <div class="login-time" id="loginTime">00:00</div>
+      <div class="login-date" id="loginDate"></div>
+      <div class="login-avatar">沈</div>
+      <h2 style="margin-bottom:3px">沈知珩</h2>
+      <p class="small">歡迎回來</p>
+      <input id="passwordInput" type="password" maxlength="4" inputmode="numeric" autocomplete="off" placeholder="輸入密碼" onkeydown="if(event.key==='Enter')unlockPhone()">
+      <button class="action" style="width:210px;margin-top:15px" onclick="unlockPhone()">解鎖手機</button>
+      <div id="loginError" class="login-error"></div>
+      <div class="login-hint">請輸入四位數密碼</div>
+    </div>`;
+  updateClock();
+}
+function unlockPhone(){
+  if($("passwordInput").value===PHONE_PASSWORD){
+    $("navbar").style.display="flex";home();
+  }else{
+    $("loginError").textContent="密碼錯誤，請重新輸入。";
+    $("passwordInput").value="";
+    $("passwordInput").focus();
+  }
+}
+function lockPhone(){login()}
+function home(){
+  $("navbar").style.display="flex";
+  screen.innerHTML=`
+  <div class="profile"><div class="avatar">沈</div><h2>沈知珩</h2><p>26歲｜建築設計師</p><p class="small">「不必事事都有答案。」</p></div>
+  <div class="row"><span class="small">MONDAY · NOVEMBER 17</span><span class="small">23°C ☁</span></div>
+  <div class="apps">
+    <button class="app" onclick="openApp('LNE')"><div class="app-icon green lne-icon">LNE</div>LNE</button>
+    <button class="app" onclick="openApp('TG')"><div class="app-icon pink">◎</div>TG</button>
+    <button class="app" onclick="openApp('飛書')"><div class="app-icon blue">♟</div>飛書</button>
+    <button class="app" onclick="openApp('備忘錄')"><div class="app-icon gold">▤</div>備忘錄</button>
+    <button class="app" onclick="openApp('行事曆')"><div class="app-icon gray">▦</div>行事曆</button>
+    <button class="app" onclick="openApp('相簿')"><div class="app-icon purple">📷</div>相簿</button>
+  </div>
+  <div class="card" style="margin-top:30px"><div class="row"><b>今日狀態</b><span class="small">23:16</span></div><p>剛結束工作。打算看一會兒書再睡。</p></div>
+  <div style="text-align:center"><button class="lock-button" onclick="lockPhone()">鎖定手機</button></div>`;
+}
+function openApp(name){if(name==="LNE")lne();else if(name==="TG")tg();else if(name==="飛書")feishu();else if(name==="備忘錄")notes();else if(name==="行事曆")calendar();else if(name==="相簿")album()}
+function lne(){
+  screen.innerHTML=`<h2>LNE <span class="small">MESSAGES</span></h2><div class="card"><p>最近的對話</p>
+  ${Object.keys(data.messages).map(n=>`<div class="item" onclick="chat('${escapeHTML(n)}')"><div class="mini-avatar">${escapeHTML(n[0])}</div><div style="flex:1"><b>${escapeHTML(n)}</b><div class="small">${escapeHTML(data.messages[n].at(-1)?.text||"尚無訊息")}</div></div><span class="small">›</span></div>`).join("")}</div>
+  <button class="action" onclick="newChat()">＋ 新增對話</button>`;
+}
+function chat(name){
+  const msgs=data.messages[name];
+  screen.innerHTML=`<button class="back" onclick="lne()">‹ 返回對話列表</button><h2>${escapeHTML(name)}</h2><div id="chatMessages">${msgs.map(m=>`<div class="chat-bubble ${m.mine?"mine":""}">${escapeHTML(m.text)}</div>`).join("")}</div><hr><div class="chat-input"><input id="chatText" placeholder="輸入訊息..." onkeydown="if(event.key==='Enter')sendMsg('${escapeHTML(name)}')"><button class="action" onclick="sendMsg('${escapeHTML(name)}')">傳送</button></div>`;
+}
+function sendMsg(name){const input=$("chatText"),text=input.value.trim();if(!text)return;data.messages[name].push({text,mine:true});save();chat(name)}
+function newChat(){
+  screen.innerHTML=`<button class="back" onclick="lne()">‹ 返回</button><h2>新增對話</h2><input id="newName" placeholder="輸入聯絡人名稱"><button class="action" onclick="const n=$('newName').value.trim();if(n&&!data.messages[n]){data.messages[n]=[];save();chat(n)}else alert('名稱不可空白或重複')">建立聊天</button>`;
+}
+function tg(){
+  screen.innerHTML=`<h2>TG <span class="small">SOCIAL</span></h2><div class="card profile"><div class="avatar">沈</div><h3>沈知珩</h3><p>Architect | 26</p><p>Somewhere between work and life.</p><div class="row"><span>18 貼文</span><span>326 粉絲</span><span>208 追蹤中</span></div></div>
+  <div class="card"><b>發布新貼文</b><textarea id="newPost" placeholder="今天想分享什麼？"></textarea><button class="action" onclick="publishPost()">發布</button></div><h3>我的動態</h3>${data.posts.map((p,i)=>postCard(p,i)).join("")}`;
+}
+function postCard(p,i){return `<div class="card"><div class="row"><b>${escapeHTML(p.author)}</b><span class="small">${escapeHTML(p.time)}</span></div><p>${escapeHTML(p.text)}</p><div class="post-image">▧</div><div class="row"><span>♡ ${p.likes}　💬 ${p.comments.length}</span><button class="action" onclick="likePost(${i})">按讚</button></div>${p.comments.map(c=>`<p class="small">${escapeHTML(c)}</p>`).join("")}<input id="comment${i}" placeholder="寫下留言..."><button class="action" onclick="commentPost(${i})">留言</button><button class="back" onclick="deletePost(${i})">刪除貼文</button></div>`}
+function publishPost(){const text=$("newPost").value.trim();if(!text)return;data.posts.unshift({author:"沈知珩",time:"剛剛",text,likes:0,comments:[]});save();tg()}
+function likePost(i){data.posts[i].likes++;save();tg()}
+function commentPost(i){const v=$("comment"+i).value.trim();if(!v)return;data.posts[i].comments.push("你："+v);save();tg()}
+function deletePost(i){if(confirm("確定刪除這則貼文？")){data.posts.splice(i,1);save();tg()}}
+function feishu(){
+  screen.innerHTML=`<h2>飛書 <span class="small">COMMUNITY</span></h2><div class="card"><b>好友動態</b>${data.feed.map((f,i)=>`<div class="card"><b>${escapeHTML(f.author)}</b><span class="small"> · ${escapeHTML(f.time)}</span><p>${escapeHTML(f.text)}</p><div class="row"><span class="small">♡ ${f.likes}</span><button class="action" onclick="feedLike(${i})">按讚</button></div></div>`).join("")}</div><div class="card"><b>發布動態</b><textarea id="feedText" placeholder="分享你的近況..."></textarea><button class="action" onclick="publishFeed()">發布</button></div>`;
+}
+function feedLike(i){data.feed[i].likes++;save();feishu()}
+function publishFeed(){const v=$("feedText").value.trim();if(!v)return;data.feed.unshift({author:"沈知珩",text:v,time:"剛剛",likes:0});save();feishu()}
+function notes(){
+  screen.innerHTML=`<h2>備忘錄</h2><button class="action" onclick="editNote(-1)">＋ 新增筆記</button><div style="margin-top:18px">${data.notes.map((n,i)=>`<div class="card note" onclick="editNote(${i})"><b>${escapeHTML(n.title)}</b><p>${escapeHTML(n.content).replace(/\n/g,"<br>")}</p><span class="small">點擊查看或編輯　›</span></div>`).join("")}</div>`;
+}
+function editNote(i){const n=i===-1?{title:"",content:""}:data.notes[i];screen.innerHTML=`<button class="back" onclick="notes()">‹ 返回筆記</button><h2>${i===-1?"新增筆記":"編輯筆記"}</h2><input id="noteTitle" value="${escapeHTML(n.title)}" placeholder="標題"><textarea id="noteContent" style="height:250px">${escapeHTML(n.content)}</textarea><button class="action" onclick="saveNote(${i})">儲存</button>${i!==-1?`<button class="action" style="background:#934c4c;color:white" onclick="removeNote(${i})">刪除</button>`:""}`}
+function saveNote(i){const n={title:$("noteTitle").value.trim(),content:$("noteContent").value};if(!n.title)return alert("請輸入標題");if(i===-1)data.notes.unshift(n);else data.notes[i]=n;save();notes()}
+function removeNote(i){if(confirm("確定刪除筆記？")){data.notes.splice(i,1);save();notes()}}
+function calendar(){screen.innerHTML=`<h2>行事曆</h2><div class="card"><h3>11月17日 星期一</h3><hr><p>09:30　建築事務所例會</p><p>11:00　專案設計討論</p><p>14:00　客戶會議</p><p>18:30　下班</p><p>20:00　私人時間</p></div><div class="card"><h3>近期行程</h3><p>11/19　建築模型提案</p><p>11/21　與周予安吃飯</p><p>11/24　專案初稿提交</p></div>`}
+function album(){screen.innerHTML=`<h2>相簿</h2><div class="card"><h3>最近項目</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="post-image">☕</div><div class="post-image">🏙</div><div class="post-image">📐</div><div class="post-image">🌙</div></div><p class="small">部分照片尚未整理。</p></div>`}
+updateClock();setInterval(updateClock,30000);login();
+</script>
+</body>
+</html>
